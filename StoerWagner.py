@@ -13,6 +13,7 @@ class Node:
         self.parent = None
         self.isPresent = True
         self.notMerged = True
+        self.flag_update = 0
         self.index = tag-1 # Track the index of the node in the heap instead of using list.index() method which is O(n)
         self.adjacencyList = []
 
@@ -159,35 +160,67 @@ def contract(G: Graph, s: Node, t: Node):
         s.notMerged = False
         tag_to_pop = s.tag
         tag_to_keep = t.tag
-        t.adjacencyList += s.adjacencyList
+        node_to_keep = t
+        node_to_pop = s
     else: 
         t.notMerged = False
         tag_to_pop = t.tag
         tag_to_keep = s.tag
-        s.adjacencyList += t.adjacencyList
-
+        node_to_keep = s
+        node_to_pop = t
     #traverse through each node and check if it connects to both s and t
     #if so then calculate the new adjacent cost to the merged s,t node
+    #if it only connects to the node we are "removing", then point it to the newly merged s,t node
+    nodes_to_add = []
     for u in G.nodes.values():
         flag_update = 0
         new_adjCost = 0
+        connected_tag = []
         for v in u.adjacencyList:
-            if v[0] == s or v[0] == t:
+            if v[0] == s:
                 flag_update += 1
                 new_adjCost += v[1]
-        #print(flag_update, new_adjCost)
+                connected_tag.append(s.tag)
+            if v[0] == t:
+                flag_update += 1
+                new_adjCost += v[1]
+                connected_tag.append(t.tag)
 
-        if flag_update == 2:
+        #if only connected to the node we are "removing", point it to the newly merged node with the same weight 
+        if flag_update == 1 and connected_tag[0] == tag_to_pop and u.tag != tag_to_keep:
+            u.flag_update = 1
             for v in u.adjacencyList:
-                if v[0] == s and v[0].notMerged:
-                        v[1] = new_adjCost
-                elif v[0] == t and v[0].notMerged: 
-                        v[1] = new_adjCost
+                if v[0].tag == tag_to_pop:
+                    nodes_to_add.append([u,v[1]])
+                    v[0] = node_to_keep
 
-    for u in G.nodes.get(tag_to_keep).adjacencyList:
-        print("test")
+            
+        #if connected to both, update cost to the kept merged node, and remove the "removed" node from it's adjacency list 
+        if flag_update == 2:
+            u.flag_update = 2
+            new_adjacencyList = []
+            for v in u.adjacencyList:
+                if v[0].tag != tag_to_pop and v[0] != node_to_keep:
+                    new_adjacencyList.append(v)
+                elif v[0].tag != tag_to_pop and v[0] == node_to_keep:
+                    new_adjacencyList.append([v[0],new_adjCost])
+            u.adjacencyList = new_adjacencyList
 
-    #G.nodes.pop(tag_to_pop)
+    remove_this = empty
+    for u in node_to_keep.adjacencyList:
+
+        if u[0].tag == tag_to_pop:
+            remove_this = u
+        
+        if u[0].flag_update == 2:
+            for v in u[0].adjacencyList:
+                if v[0] == node_to_keep:
+                    u[1] = v[1]
+    if remove_this != empty:
+        node_to_keep.adjacencyList.remove(remove_this)
+    node_to_keep.adjacencyList += nodes_to_add
+
+    G.nodes.pop(tag_to_pop)
 
     return G
 
@@ -196,25 +229,15 @@ def GlobalMinCut (G :Graph):
         return G
     else:
         C1, s, t = stMinCut(G)
-        C2 = stMinCut(contract(G, s, t))
+        print(s, t)
+        C2 = GlobalMinCut(contract(G, s, t))
 
 
 new = Graph()
 new.buildGraph(open("r_dataset/test.txt", "r"))
+test = GlobalMinCut(new)
 
-ST_cut, s, t = stMinCut(new)
 
-new_G = contract(new, s, t)
-
-for u in new_G.nodes.values():
-    print(u, u.tag, u.adjacencyList,"\n")
-
-new_ST, new_s, new_t = stMinCut(new_G)
-
-new_G2 = contract(new_G, new_s, new_t)
-
-for u in new_G2.nodes.values():
-    print(u, u.tag, u.notMerged, u.adjacencyList,"\n")
 
 
 
