@@ -199,10 +199,8 @@ def GlobalMinCut (G :Graph):
         C2 = stMinCut(contract(G, s, t))
 
 
-
-
 new = Graph()
-new.buildGraph(open("dataset/test.txt", "r"))
+new.buildGraph(open("r_dataset/test.txt", "r"))
 
 ST_cut, s, t = stMinCut(new)
 
