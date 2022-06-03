@@ -113,11 +113,13 @@ def Full_Contraction(G,V):
 '''
 
 def Edge_Select(D,W):
+
     print(D)
 
 
 def Contract_Edge(u,v):
-    #D[u]=D[u]-2*W[u,v]
+    D[u]=D[u]+D[v]-2*W[(u-1)*(len(V)-1)+v][2]
+    D[v]=0
     print(W)
 
 def Contract(G,s):
