@@ -112,66 +112,31 @@ def Full_Contraction(G,V):
     return G[0][2]
 '''
 
-# MergeSort (needed for binary search, which needed for random_select)
-def mergeSort(array):
-    if len(array) > 1:
-
-        #  r is the point where the array is divided into two subarrays
-        r = len(array)//2
-        L = array[:r]
-        M = array[r:]
-
-        # Sort the two halves
-        mergeSort(L)
-        mergeSort(M)
-
-        i = j = k = 0
-
-        # Until we reach either end of either L or M, pick larger among
-        # elements L and M and place them in the correct position at A[p..r]
-        while i < len(L) and j < len(M):
-            if L[i] < M[j]:
-                array[k] = L[i]
-                i += 1
-            else:
-                array[k] = M[j]
-                j += 1
-            k += 1
-
-        # When we run out of elements in either L or M,
-        # pick up the remaining elements and put in A[p..r]
-        while i < len(L):
-            array[k] = L[i]
-            i += 1
-            k += 1
-
-        while j < len(M):
-            array[k] = M[j]
-            j += 1
-            k += 1
-
 # Binary search (special case for random_select)
-def binarySearch(array, x): 
-
+# Return INDEX
+def binarySearch(array, x):
+    
     low = 0
     high = len(array) - 1
-
-    # Repeat until the pointers low and high meet each other
+    #mid = (high + low) // 2
+    i = 0
+    if (x < array[low]):
+        return 0
     while low <= high:
-
-        mid = low + (high - low)//2
-
-        if array[mid+1] > x and (array[mid] == x or array[mid] < x):
-            return mid+1
-                
-
-        elif array[mid] < x:
-            low = mid + 1
-
+        #print(30*"-")
+        i+=1
+        #print("Iteration: ", i)
+        mid = (high + low) // 2 
+        #print("low: ",low)
+        #print("high: ",high)
+        #print("mid: ",mid)
+        if x>=array[mid+1]:
+            low=mid+1
         else:
-            high = mid - 1
-
-    return 0
+            if x>=array[mid]:
+                return mid+1
+            high=mid-1
+    return mid + 1
 
 
 def Contract_Edge(u,v):
@@ -225,58 +190,60 @@ def Karger(G, k):
 graph, k, V, W, D= Graph().buildGraph(open("r_dataset/input_random_03_10.txt", "r"))
 # SANJAR: IMPLEMENTATION OF RANDOM_SELECT FUNCTION
 
-C = []
-t = 0
-for i in range(len(graph)):
-    for j in range(i):
-        t += C[j]
-    C.append(t)
-    t = 0
+
 
 def Random_Select(C):
-    print()
-    print("Random_select implementation:")
-    r = random.choice(range(0, max(C)))
-    print("r: ", r)
-    mergeSort(C)
-    pos = binarySearch(C, r)
-    print("pos: ", pos)
-    print("C[pos]: ", C[pos])
-    print()
-    return C[pos]
+    #print()
+    #print(30*"-")
+    #print("Random_select implementation:")
+    K = []
+    c = 0
+    for i in range(len(C)):
+        c += C[i]
+        
+        K.append(c)
+    
+    r = random.choice(range(0, K[len(K) - 1]))
+    
+    #print("r: ", r)
+    
+    pos = binarySearch(K, r) 
+    #print("K: ", K)
+    #print("Len K: ", len(K))
+    #print("pos: ", pos)
+    #print("K[pos]: ", K[pos])
+    #print(30*"-")
+    #print()
+    return pos  
 
 def Edge_Select(D, W):
-    U = 0
-    V = 0
-    u_ = Random_Select(D)
-    print("u_: ", u_)
-    if u_ in D:
-        U = D.index(u_) + 1
-    print("U: ", U)
+    U = 0 # node 1
+    V = 0 # node 2 
+    
+    #print("D: ", D)
+    u_ = Random_Select(D) 
+    U = u_ + 1
+    #print("U: ", U)
     
     
     W_ = []
     t = 0
-    p = 0
-    W_.append(t)
+
     for i in range(len(W)):
         if W[i][0] == U:
-            for j in range(p):
-                t+=W[i][2]
-            p+=1
-            W_.append(t)
-        t = 0
+            #t += W[i][2]
+            W_.append(W[i][2])
     
-    del W_[U-1]
-    print("W_: ", W_)
-    print("Len(W_): ", len(W_))
+    
+    #print("W_: ", W_)
+    #print("Len(W_): ", len(W_))
     v_ = Random_Select(W_)
-    print("v_: ", v_)
-    V = W_.index(v_)
+    V = v_ + 1
     
-    print("V: ", V)
-    print("Edge: [", U,", ",V,"]")
-    return [U,V]
+    #print("V: ", V)
+    #print("Edge: [", U,", ",V,"]")
+    return [U, V]
+
 
 
 w = Edge_Select(D, W)
