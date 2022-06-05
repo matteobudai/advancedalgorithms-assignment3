@@ -62,9 +62,9 @@ class Graph:
             z=z+1
             i=i+1
         D.pop()
-        print('D:',D)
-        print('W:',W)
-        return info_int, k, V, W, D
+        # print('D:',D)
+        # print('W:',W)
+        return info_int,  k, V, W, D
 
     #Create number of edges
     def numEdges(self, input):
@@ -112,9 +112,31 @@ def Full_Contraction(G,V):
     return G[0][2]
 '''
 
-def Edge_Select(D,W):
-
-    print(D)
+# Binary search (special case for random_select)
+# Return INDEX
+def binarySearch(array, x):
+    
+    low = 0
+    high = len(array) - 1
+    #mid = (high + low) // 2
+    i = 0
+    if (x < array[low]):
+        return 0
+    while low <= high:
+        #print(30*"-")
+        i+=1
+        #print("Iteration: ", i)
+        mid = (high + low) // 2 
+        #print("low: ",low)
+        #print("high: ",high)
+        #print("mid: ",mid)
+        if x>=array[mid+1]:
+            low=mid+1
+        else:
+            if x>=array[mid]:
+                return mid+1
+            high=mid-1
+    return mid + 1
 
 
 def Contract_Edge(u,v):
@@ -166,4 +188,70 @@ def Karger(G, k):
 
 
 graph, k, V, W, D= Graph().buildGraph(open("r_dataset/input_random_03_10.txt", "r"))
-min, time_cost= Karger(graph, k)
+# SANJAR: IMPLEMENTATION OF RANDOM_SELECT FUNCTION
+
+
+
+def Random_Select(C):
+    #print()
+    #print(30*"-")
+    #print("Random_select implementation:")
+    K = []
+    c = 0
+    for i in range(len(C)):
+        c += C[i]
+        
+        K.append(c)
+    
+    r = random.choice(range(0, K[len(K) - 1]))
+    
+    #print("r: ", r)
+    
+    pos = binarySearch(K, r) 
+    #print("K: ", K)
+    #print("Len K: ", len(K))
+    #print("pos: ", pos)
+    #print("K[pos]: ", K[pos])
+    #print(30*"-")
+    #print()
+    return pos  
+
+def Edge_Select(D, W):
+    U = 0 # node 1
+    V = 0 # node 2 
+    
+    #print("D: ", D)
+    u_ = Random_Select(D) 
+    U = u_ + 1
+    #print("U: ", U)
+    
+    
+    W_ = []
+    t = 0
+
+    for i in range(len(W)):
+        if W[i][0] == U:
+            #t += W[i][2]
+            W_.append(W[i][2])
+    
+    
+    #print("W_: ", W_)
+    #print("Len(W_): ", len(W_))
+    v_ = Random_Select(W_)
+    V = v_ + 1
+    
+    #print("V: ", V)
+    #print("Edge: [", U,", ",V,"]")
+    return [U, V]
+
+
+
+w = Edge_Select(D, W)
+
+
+# min, time_cost= Karger(graph, k)
+
+
+
+
+    
