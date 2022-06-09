@@ -162,13 +162,13 @@ def Random_Select(C):
     #print()
     return pos  
 
-def Edge_Select(D, W):
-    U = 0 # node 1
-    V = 0 # node 2 
+def Edge_Select(V1, D, W):
+    U2 = 0 # node 1
+    V2 = 0 # node 2 
     
     #print("D: ", D)
     u_ = Random_Select(D) 
-    U = u_ + 1
+    U2 = u_ + 1
     #print("U: ", U)
     
     
@@ -176,7 +176,7 @@ def Edge_Select(D, W):
     t = 0
 
     for i in range(len(W)):
-        if W[i][0] == U:
+        if W[i][0] == U2:
             #t += W[i][2]
             W_.append(W[i][2])
     
@@ -184,11 +184,11 @@ def Edge_Select(D, W):
     #print("W_: ", W_)
     #print("Len(W_): ", len(W_))
     v_ = Random_Select(W_)
-    V = v_ + 1
+    V2 = v_ + 1
     
     #print("V: ", V)
     #print("Edge: [", U,", ",V,"]")
-    return U,V
+    return U2,V2
 
 
 def Contract_Edge(u,v, W, D):
@@ -199,10 +199,10 @@ def Contract_Edge(u,v, W, D):
     D[v]=0
     W[(u)*(len(V))+v][2]=0
     W[(v)*(len(V))+u][2]=0
+
     z=0
     i=0
-    while i<len(V):
-        
+    while i<len(V):       
         W[(u)*(len(V))+z][2]=W[(u)*(len(V))+z][2]+W[(v)*(len(V))+z][2]
         W[(i)*(len(V))+u][2]=W[(i)*(len(V))+u][2]+W[(i)*(len(V))+v][2]
         W[(v)*(len(V))+z][2]=0
@@ -215,34 +215,32 @@ def Contract_Edge(u,v, W, D):
 def Contract(s, V,  W, D):
     n=len(V)
     i=1
-    while i<=n-s:
-        
-        u,v=Edge_Select(D, W)      
+    while i<=n-s:   
+        u,v=Edge_Select(V, D, W)      
         Contract_Edge(u, v, W, D)
-        V.remove(v)
-        
+        V.remove(v)      
         i=i+1
-    return D,W
+    return V,D,W
 
 
 def Recursive_Contract(V, W, D):
     n=len(V)
-    
     if n<=6:
-        D, W=Contract(2, V, W, D)
+        V, D, W=Contract(2, V, W, D)
         return D[V[1]-1]
-    t=n/sqrt(2)+1
-    D, W=Contract( t, V,  W, D)
-    w1=Recursive_Contract(V, W, D)
 
-    D, W= Contract(t, V,  W, D)
+    t=n/sqrt(2)+1
+
+    V, D, W=Contract( t, V,  W, D)
+    w1=Recursive_Contract(V, W, D)
+    V, D, W= Contract(t, V,  W, D)
     w2=Recursive_Contract(V, W, D)
     
     return min(w1,w2)
 
 def Karger(G,k):
     start = time.time()
-    min=math.inf
+    min1=math.inf
     
     for i in range(0,k):
         copyV=copy.deepcopy(V)
@@ -251,10 +249,9 @@ def Karger(G,k):
         
         t=Recursive_Contract(copyV, copyW, copyD)
         #t=Full_Contraction(copyG, copyV)
-        
-        if t<min:
-            min=t
-    print('Minimum:', min)
+        if t<min1:
+            min1=t
+    print('Minimum:', min1)
     end = time.time()
     time_cost =  end - start
     print('Time:', time_cost)
