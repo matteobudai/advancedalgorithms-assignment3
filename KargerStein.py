@@ -191,7 +191,7 @@ def Edge_Select(D, W):
     return U,V
 
 
-def Contract_Edge(u,v):
+def Contract_Edge(u,v, W, D):
     u=u-1
     v=v-1
     
@@ -209,46 +209,49 @@ def Contract_Edge(u,v):
         W[(i)*(len(V))+v][2]=0
         z=z+1
         i=i+1
-    print('New W after contraction:', W)
-    print('New D after contraction:', D)
+    
    
 
-def Contract(G,s):
+def Contract(s, V,  W, D):
     n=len(V)
     i=1
-    print('Nodes:',V)
-    while i<n-s:
-        u,v=Edge_Select(D,W)
-        print('Nodes selected: ', u,v)
-        Contract_Edge(u,v)
+    while i<=n-s:
+        
+        u,v=Edge_Select(D, W)      
+        Contract_Edge(u, v, W, D)
+        V.remove(v)
         
         i=i+1
     return D,W
 
 
-def Recursive_Contract(G,V):
+def Recursive_Contract(V, W, D):
     n=len(V)
+    
     if n<=6:
-        Gp=Contract(G,2)
-        return
+        D, W=Contract(2, V, W, D)
+        return D[V[1]-1]
     t=n/sqrt(2)+1
-  
-    G1=Contract(G,t)
-    w1=Recursive_Contract(G1,V)
-    G2=Contract(G,t)
-    w2=Recursive_Contract(G2,V)
-        
+    D, W=Contract( t, V,  W, D)
+    w1=Recursive_Contract(V, W, D)
+
+    D, W= Contract(t, V,  W, D)
+    w2=Recursive_Contract(V, W, D)
+    
     return min(w1,w2)
 
-def Karger(G, k):
+def Karger(G,k):
     start = time.time()
     min=math.inf
+    
     for i in range(0,k):
         copyV=copy.deepcopy(V)
-        copyG=copy.deepcopy(G)
-        t=Recursive_Contract(copyG,copyV)
+        copyW=copy.deepcopy(W)
+        copyD=copy.deepcopy(D)
+        
+        t=Recursive_Contract(copyV, copyW, copyD)
         #t=Full_Contraction(copyG, copyV)
-        print('Distance founded: ', t)
+        
         if t<min:
             min=t
     print('Minimum:', min)
@@ -258,15 +261,17 @@ def Karger(G, k):
     return min, time_cost
 
 
+'''
 graph, k, V, W, D= Graph().buildGraph(open("r_dataset/input_random_03_10.txt", "r"))
 min, time_cost= Karger(graph, k)
 
 '''
-for filepath in glob.iglob('r_dataset/*.txt'):
-    start = time.time()
-    graph, k, V, W, D= Graph().buildGraph(open(filepath, "r"))
+for filepath in glob.iglob('r_dataset//*.txt'):
+    new=Graph()
+    graph, k, V, W, D= new.buildGraph(open(filepath, "r"))
+    print(filepath)
+    min, time_cost= Karger(graph,k)
+
     
-    end = time.time()
-    time_cost=end-start
-    print(time_cost) 
-'''  
+ 
+  
