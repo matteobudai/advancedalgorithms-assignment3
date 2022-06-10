@@ -3,6 +3,7 @@ from re import T
 import time
 from collections import defaultdict
 from numpy import empty
+import glob
 
 #Create a node
 class Node:
@@ -238,7 +239,7 @@ def contract(G: Graph, s: Node, t: Node):
 
 def GlobalMinCut (G :Graph):
     if len(list(G.nodes.values())) == 2:
-        ST_cut, ST_cut_cost, s, t = stMinCut(G)
+        ST_cut_cost = G.nodes.get(1).adjacencyList[0][1]
         return ST_cut_cost
     else:
         ST_cut, ST_cut_cost, s, t = stMinCut(G)
@@ -247,10 +248,24 @@ def GlobalMinCut (G :Graph):
         if ST_cut_cost < C2:
             return ST_cut_cost
         else: return C2
+
        
-
-
+'''
 new = Graph()
-new.buildGraph(open("r_dataset/input_random_04_10.txt", "r"))
+new.buildGraph(open("r_dataset/input_random_56_500.txt", "r"))
 test = GlobalMinCut(new)
 print(test)
+
+'''
+
+for filepath in glob.iglob('r_dataset//*.txt'):
+    new = Graph()
+    new.buildGraph(open(filepath, "r"))
+    start = time.time()
+    ST_cut_cost = GlobalMinCut(new)
+    end = time.time()
+    time_cost =  end - start
+    print("File: ",filepath)
+    print("Min Cut Cost: ", ST_cut_cost)
+    print("Execution time: ", time_cost)
+
