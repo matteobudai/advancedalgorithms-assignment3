@@ -28,7 +28,8 @@ class Graph:
             if (int(info[i][1])) not in V: 
                 V.append(int(info[i][1]))
             info_int.append([int(info[i][0]), int(info[i][1]), int(info[i][2])])
-        k=int(((n**2)/2)*log(n))
+        #k=int(((n**2)/2)*log(n))
+        k = int(math.log(n))**2
         i=0
         j=0
         l=1
@@ -239,23 +240,32 @@ def Recursive_Contract(V, W, D):
     return min(w1,w2)
 
 def Karger(G,k):
+    timeout = 60
     start = time.time()
+
     min1=math.inf
-    
+
     for i in range(0,k):
+        if time.time() - start > timeout:
+            print("Timed Out at iteration =", i, " out of k =", k)
+            break
         copyV=copy.deepcopy(V)
         copyW=copy.deepcopy(W)
         copyD=copy.deepcopy(D)
-        
         t=Recursive_Contract(copyV, copyW, copyD)
+
         #t=Full_Contraction(copyG, copyV)
         if t<min1:
+            discovery_time = time.time() - start
             min1=t
+
     print('Minimum:', min1)
     end = time.time()
     time_cost =  end - start
-    print('Time:', time_cost)
-    return min, time_cost
+    print('Total Time:', time_cost)
+    print('Discovery Time: ', discovery_time)
+    
+    return min, time_cost, discovery_time
 
 
 '''
@@ -267,7 +277,7 @@ for filepath in glob.iglob('r_dataset//*.txt'):
     new=Graph()
     graph, k, V, W, D= new.buildGraph(open(filepath, "r"))
     print(filepath)
-    min, time_cost= Karger(graph,k)
+    min, time_cost, discovery_time= Karger(graph,k)
 
     
  
