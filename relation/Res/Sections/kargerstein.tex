@@ -71,9 +71,9 @@ For the implementation of the algorithm we used these functions:
 		\item  If we found a value less than our minimum we update it  and we set the discovery time;
 		\item  In the end we print the Minimum Cut, the Total time and the discovery time.
 		\end{enumerate}
-	\item  \textbf{Recursive-Contract(V, W, D)}: ;
-	\item  \textbf{Contract(s, V,  W, D)}: ;
-	\item  \textbf{Contract-Edge(u,v, W, D)}: ;
+	\item  \textbf{Recursive-Contract(V, W, D)}: In this function we follow exactly the function above with our data structure;
+	\item  \textbf{Contract(s, V,  W, D)}: Also in this function we follow the function above. The only difference is that when we select and contract an edge (u,v) then we remove from V the vertex V to respect the contraction;
+	\item  \textbf{Contract-Edge(u,v, W, D)}: Also in this case we follow the function above (We update D and W with the new values to execute the contraction of the edge) with our data structure;
 	\item  \textbf{Edge-Select(V1, D, W)}: that used:
 	\begin{enumerate}
 		\item  \textbf{Random-Select(C)}: ;
