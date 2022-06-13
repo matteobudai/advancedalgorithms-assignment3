@@ -48,6 +48,13 @@ In the next subsections we explain how we have implemented the data structure an
 
 
 \subsection{Data Structure}
+For the implementation of the algortihm we used:
+\begin{itemize}
+	\item  \textbf{k}: is a constant ($log^2n$) used by Karger to repeat Recursive-Contract k times and to obtain an error with probability less or equal to 1/n;
+	\item  \textbf{V}: is the list of nodes;
+	\item  \textbf{D}: is the list of the sum of the weights of each node;
+	\item  \textbf{W}: is the list of the graph with 3 parameters(node,node,weight). Each node is connected with the others and if they are not connected the third parameter is set to 0 otherwise is set to the correct weight.
+\end{itemize}
 
 
 \subsection{Implementation}
