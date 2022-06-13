@@ -59,9 +59,18 @@ For the implementation of the algortihm we used:
 
 
 \subsection{Implementation}
-For the implementation of the algorithmwe used these functions:
+For the implementation of the algorithm we used these functions:
 \begin{itemize}
-	\item  \textbf{Karger(G,k)}: ;
+	\item  \textbf{Karger(G,k)}: 
+		\begin{enumerate}
+		\item  This is the main function of the algorithm where we set the timeout to 60 to limit the execution time of large instances;
+		\item  We start the time and we set the minimum cut to infinite;
+		\item  We iterate k times to obtain an error with probability less or equal to 1/n;
+		\item  If the time minus the starting time is greater than the timeout we break;
+		\item  We execute a copy of V,W and D and then we call the function Recursive-Contract;
+		\item  If we found a value less than our minimum we update it  and we set the discovery time;
+		\item  In the end we print the Minimum Cut, the Total time and the discovery time.
+		\end{enumerate}
 	\item  \textbf{Recursive-Contract(V, W, D)}: ;
 	\item  \textbf{Contract(s, V,  W, D)}: ;
 	\item  \textbf{Contract-Edge(u,v, W, D)}: ;
