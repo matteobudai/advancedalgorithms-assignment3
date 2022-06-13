@@ -1,5 +1,28 @@
 \section{Karger and Stein's Randomized Algorithm}\label{karger}
 
+\begin{lstlisting}[mathescape=true]
+	KARGER (G,k)
+	A = +$\infty$
+	for i = 1 to k:		
+		t = RECURSIVE_CONTRACT(G)		
+			if t < min:
+					min = t
+	return min
+	
+	RECURSIVE_CONTRACT(G=(D,W))
+	n= number of vertices in G
+	if n<=6:
+		Gp= CONTRACT(G,2)
+		return weight of the only edge (u,v) in Gp
+	t = n/$\sqrt{2}$+1
+	for i = 1 to 2:
+		Gi = CONTRACT(G,t)
+		wi = RECURSIVE_CONTRACT(Gi)
+	return min(w1,w2)
+	
+	
+\end{lstlisting}
+
 
 \subsection{Data Structure}
 

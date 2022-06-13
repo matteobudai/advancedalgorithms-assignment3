@@ -203,13 +203,14 @@ def Contract_Edge(u,v, W, D):
 
     z=0
     i=0
-    while i<len(V):       
-        W[(u)*(len(V))+z][2]=W[(u)*(len(V))+z][2]+W[(v)*(len(V))+z][2]
-        W[(i)*(len(V))+u][2]=W[(i)*(len(V))+u][2]+W[(i)*(len(V))+v][2]
-        W[(v)*(len(V))+z][2]=0
-        W[(i)*(len(V))+v][2]=0
+    while i<len(V):
+        if(i!=u and i!=v):     
+            W[(u)*(len(V))+z][2]=W[(u)*(len(V))+z][2]+W[(v)*(len(V))+z][2]
+            W[(i)*(len(V))+u][2]=W[(i)*(len(V))+u][2]+W[(i)*(len(V))+v][2]
+            W[(v)*(len(V))+z][2]=0
+            W[(i)*(len(V))+v][2]=0
         z=z+1
-        i=i+1
+        i=i+1   
     
    
 
@@ -236,7 +237,6 @@ def Recursive_Contract(V, W, D):
     w1=Recursive_Contract(V, W, D)
     V, D, W= Contract(t, V,  W, D)
     w2=Recursive_Contract(V, W, D)
-    
     return min(w1,w2)
 
 def Karger(G,k):
@@ -268,9 +268,8 @@ def Karger(G,k):
     return min, time_cost, discovery_time
 
 
-'''
 graph, k, V, W, D= Graph().buildGraph(open("r_dataset/input_random_03_10.txt", "r"))
-min, time_cost= Karger(graph, k)
+min, time_cost, disc_time= Karger(graph, k)
 
 '''
 for filepath in glob.iglob('r_dataset//*.txt'):
@@ -278,7 +277,8 @@ for filepath in glob.iglob('r_dataset//*.txt'):
     graph, k, V, W, D= new.buildGraph(open(filepath, "r"))
     print(filepath)
     min, time_cost, discovery_time= Karger(graph,k)
-
-    
+''' 
+ 
+  
  
   
