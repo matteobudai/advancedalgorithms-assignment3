@@ -1,7 +1,7 @@
 \section{Karger and Stein's Randomized Algorithm}\label{karger}
 
 \begin{lstlisting}[mathescape=true]
-	KARGER (G,k)
+	KARGER (G,k):
 	A = +$\infty$
 	for i = 1 to k:		
 		t = RECURSIVE_CONTRACT(G)		
@@ -9,7 +9,7 @@
 					min = t
 	return min
 	
-	RECURSIVE_CONTRACT(G=(D,W))
+	RECURSIVE_CONTRACT(G=(D,W)):
 	n= number of vertices in G
 	if n<=6:
 		Gp= CONTRACT(G,2)
@@ -20,15 +20,37 @@
 		wi = RECURSIVE_CONTRACT(Gi)
 	return min(w1,w2)
 	
+	CONTRACT(G=(D,W),k):
+	n= number of vertices in G
+	for i = 1 to n-k:
+		(u,v) = EDGE_SELECT(D,W)
+		CONTRACT_EDGE(u,v)
+	return D,W
+	
+	CONTRACT_EDGE(u,v):
+	D[u] = D[u]+D[v]-2W[u,v]
+	D[v] = 0
+	W[u,v] = W[v,u] = 0
+	for each vertex w $\in$ V: except u and v:
+		W[u,v] = W[u,w] + W[v,w]
+		W[w,u] = W[w,u] + W[w,v]
+		W[v,w] = W[w,v] = 0
+		
+	EDGE_SELECT(D,W)
+	1. Choose u with probability proportional to D[u]
+	2. Once u is fixed, choose v with probability proportional to W[u,v]
+	3. return the edge (u,v)
 	
 \end{lstlisting}
+
+This is a randomized algorithm for the computation of a graph.
+In the next subsections we explain how we have implemented the data structure and the functions of the algorithm.
 
 
 \subsection{Data Structure}
 
 
 \subsection{Implementation}
-
 
 
 \subsection{Complexity}

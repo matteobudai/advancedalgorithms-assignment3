@@ -28,8 +28,9 @@ class Graph:
             if (int(info[i][1])) not in V: 
                 V.append(int(info[i][1]))
             info_int.append([int(info[i][0]), int(info[i][1]), int(info[i][2])])
-        #k=int(((n**2)/2)*log(n))
+        #k
         k = int(math.log(n))**2
+        # Data structure of W
         i=0
         j=0
         l=1
@@ -53,6 +54,7 @@ class Graph:
                 W[g][2]=int(info[u][2])
                 W[h][2]=int(info[u][2])
             u=u+1
+        #Data structure of D
         i=0
         u=0
         z=1
@@ -80,39 +82,6 @@ class Graph:
         numNodes = int(lines[0].split()[0])
         return numNodes
 
-'''
-def Full_Contraction(G,V):
-    while len(V)>2:
-        e = random.choice(G)
-        G.remove(e)
-        l=len(G)
-        i=0
-        while i<l:
-            if G[i][0] == e[0]:
-               G[i][0]= e[1]
-            if G[i][1] == e[0]:
-                G[i][1]= e[1]
-            i=i+1
-        j=0
-        while j<l:
-            w=0
-            while w<l:               
-                if j!=w:      
-                    if G[j][0]==G[w][0] and G[j][1]==G[w][1]:
-                        G[j][2]=G[j][2]+G[w][2]
-                        G.remove(G[w])
-                        w=w-1
-                        l=l-1
-                    if G[j][0]==G[w][1] and G[j][1]==G[w][0]:
-                        G[j][2]=G[j][2]+G[w][2]
-                        G.remove(G[w])
-                        w=w-1
-                        l=l-1
-                w=w+1         
-            j=j+1
-        V.remove(e[0]) 
-    return G[0][2]
-'''
 # Binary search (special case for random_select)
 # Return INDEX
 def binarySearch(array, x):
@@ -192,6 +161,7 @@ def Edge_Select(V1, D, W):
     return U2,V2
 
 
+# contraction of the edges
 def Contract_Edge(u,v, W, D):
     u=u-1
     v=v-1
@@ -204,6 +174,7 @@ def Contract_Edge(u,v, W, D):
     z=0
     i=0
     while i<len(V):
+        #except u and v
         if(i!=u and i!=v):     
             W[(u)*(len(V))+z][2]=W[(u)*(len(V))+z][2]+W[(v)*(len(V))+z][2]
             W[(i)*(len(V))+u][2]=W[(i)*(len(V))+u][2]+W[(i)*(len(V))+v][2]
@@ -220,6 +191,7 @@ def Contract(s, V,  W, D):
     while i<=n-s:   
         u,v=Edge_Select(V, D, W)      
         Contract_Edge(u, v, W, D)
+        #remove the edge
         V.remove(v)      
         i=i+1
     return V,D,W
@@ -242,20 +214,19 @@ def Recursive_Contract(V, W, D):
 def Karger(G,k):
     timeout = 60
     start = time.time()
-
     min1=math.inf
-
     for i in range(0,k):
         if time.time() - start > timeout:
             print("Timed Out at iteration =", i, " out of k =", k)
             break
+        #copy of the data structure
         copyV=copy.deepcopy(V)
         copyW=copy.deepcopy(W)
         copyD=copy.deepcopy(D)
+        #call the contraction
         t=Recursive_Contract(copyV, copyW, copyD)
-
-        #t=Full_Contraction(copyG, copyV)
         if t<min1:
+            #update the new min
             discovery_time = time.time() - start
             min1=t
 
@@ -267,7 +238,7 @@ def Karger(G,k):
     
     return min, time_cost, discovery_time
 
-
+'''
 graph, k, V, W, D= Graph().buildGraph(open("r_dataset/input_random_03_10.txt", "r"))
 min, time_cost, disc_time= Karger(graph, k)
 
@@ -277,7 +248,7 @@ for filepath in glob.iglob('r_dataset//*.txt'):
     graph, k, V, W, D= new.buildGraph(open(filepath, "r"))
     print(filepath)
     min, time_cost, discovery_time= Karger(graph,k)
-''' 
+
  
   
  
