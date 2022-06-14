@@ -1,0 +1,103 @@
+\section{Karger and Stein's Randomized Algorithm}\label{karger}
+
+\begin{lstlisting}[mathescape=true]
+	KARGER (G,k):
+	A = +$\infty$
+	for i = 1 to k:		
+		t = RECURSIVE_CONTRACT(G)		
+			if t < min:
+					min = t
+	return min
+	
+	RECURSIVE_CONTRACT(G=(D,W)):
+	n= number of vertices in G
+	if n<=6:
+		Gp= CONTRACT(G,2)
+		return weight of the only edge (u,v) in Gp
+	t = n/$\sqrt{2}$+1
+	for i = 1 to 2:
+		Gi = CONTRACT(G,t)
+		wi = RECURSIVE_CONTRACT(Gi)
+	return min(w1,w2)
+	
+	CONTRACT(G=(D,W),k):
+	n= number of vertices in G
+	for i = 1 to n-k:
+		(u,v) = EDGE_SELECT(D,W)
+		CONTRACT_EDGE(u,v)
+	return D,W
+	
+	CONTRACT_EDGE(u,v):
+	D[u] = D[u]+D[v]-2W[u,v]
+	D[v] = 0
+	W[u,v] = W[v,u] = 0
+	for each vertex w $\in$ V: except u and v:
+		W[u,v] = W[u,w] + W[v,w]
+		W[w,u] = W[w,u] + W[w,v]
+		W[v,w] = W[w,v] = 0
+		
+	EDGE_SELECT(D,W)
+	1. Choose u with probability proportional to D[u]
+	2. Once u is fixed, choose v with probability proportional to W[u,v]
+	3. return the edge (u,v)
+	
+\end{lstlisting}
+
+This is a randomized algorithm for the computation of a graph.
+In the next subsections we explain how we have implemented the data structure and the functions of the algorithm.
+
+\pagebreak
+
+\subsection{Data Structure}
+For the implementation of the algortihm we used:
+\begin{itemize}
+	\item  \textbf{k}: is a constant ($log^2n$) used by Karger to repeat Recursive-Contract k times and to obtain an error with probability less or equal to 1/n;
+	\item  \textbf{V}: is the list of nodes;
+	\item  \textbf{D}: is the list of the sum of the weights of each node;
+	\item  \textbf{W}: is the list of the graph with 3 parameters(node,node,weight). Each node is connected with the others and if they are not connected the third parameter is set to 0 otherwise is set to the correct weight.
+\end{itemize}
+
+
+\subsection{Implementation}
+For the implementation of the algorithm we used these functions:
+\begin{itemize}
+	\item  \textbf{Karger(G,k)}: 
+		\begin{enumerate}
+		\item  This is the main function of the algorithm where we set the timeout to 60 to limit the execution time of large instances;
+		\item  We start the time and we set the minimum cut to infinite;
+		\item  We iterate k times to obtain an error with probability less or equal to 1/n;
+		\item  If the time minus the starting time is greater than the timeout we break;
+		\item  We execute a copy of V,W and D and then we call the function Recursive-Contract;
+		\item  If we found a value less than our minimum we update it  and we set the discovery time;
+		\item  In the end we print the Minimum Cut, the Total time and the discovery time.
+		\end{enumerate}
+	\item  \textbf{Recursive-Contract(V, W, D)}: In this function we follow exactly the function above with our data structure;
+	\item  \textbf{Contract(s, V,  W, D)}: Also in this function we follow the function above. The only difference is that when we select and contract an edge (u,v) then we remove from V the vertex v to respect the contraction;
+	\item  \textbf{Contract-Edge(u,v, W, D)}: Also in this case we follow the function above (We update D and W with the new values to execute the contraction of the edge) with our data structure;
+	\item  \textbf{Edge-Select(V1, D, W)}: Edge selecting randome select first node and look for connected other node, algorithm use:
+	\begin{enumerate}
+		\item  \textbf{Random-Select(C)}:
+			\begin{enumerate}
+			\item  Build cumulative weights vector by input array of weights;
+			\item  Set random value \textbf{r} in range (0, max value of weight);
+			\item  Run binary search  to return node related to selected edge;
+			\end{enumerate}
+		\item  \textbf{binarySearch(array, x)}:
+			\begin{enumerate}
+			\item  Special case of binary search according to inequality C[i - 1] $\leq$ r $<$ C[i];
+			\item  Devide array in parts;
+			\item  Check first value of right part, if random value higher, then go right;
+			\item  If value lower check that previous element lower or equal;
+			\item  Return ralated name of node.
+			\end{enumerate}
+	\end{enumerate}
+
+\end{itemize}
+
+
+
+\subsection{Complexity}
+
+
+
+\pagebreak
