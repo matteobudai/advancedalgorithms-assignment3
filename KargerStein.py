@@ -14,6 +14,7 @@ class Graph:
     def buildGraph(self, input):
         lines = input.readlines()
         numEdges = int(lines[0].split()[1])
+        numNodes = int(lines[0].split()[1])
         lines.pop(0) 
         info = []
         info_int = []
@@ -31,7 +32,7 @@ class Graph:
                 V.append(int(info[i][1]))
             info_int.append([int(info[i][0]), int(info[i][1]), int(info[i][2])])
         #k
-        k = int(math.log(n))**2
+        k = int(math.log(numNodes))**2
         # Data structure of W
         i=0
         j=0
@@ -228,10 +229,10 @@ def Karger(G,k):
     print('Minimum:', min1)
     end = time.time()
     time_cost =  end - start
-    print('Total Time:', time_cost)
-    print('Discovery Time: ', discovery_time)
+    #print('Total Time:', time_cost)
+    #print('Discovery Time: ', discovery_time)
     
-    return min, time_cost, discovery_time
+    return min1, time_cost, discovery_time
 
 '''
 graph, k, V, W, D= Graph().buildGraph(open("r_dataset/input_random_03_10.txt", "r"))
@@ -245,8 +246,9 @@ num_nodes = []
 for filepath in glob.iglob('r_dataset//*.txt'):
     new=Graph()
     graph, k, V, W, D= new.buildGraph(open(filepath, "r"))
-    print(filepath)
-    min, time_cost, discovery_time= Karger(graph,k)
+    #print(filepath)
+    min1, time_cost, discovery_time= Karger(graph,k)
+    print(filepath, k)
 
     # graph part
     # num_nodes.append(len(D))
