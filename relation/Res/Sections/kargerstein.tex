@@ -72,23 +72,23 @@ For the implementation of the algorithm we used these functions:
 		\item  In the end we print the Minimum Cut, the Total time and the discovery time.
 		\end{enumerate}
 	\item  \textbf{Recursive-Contract(V, W, D)}: In this function we follow exactly the function above with our data structure;
-	\item  \textbf{Contract(s, V,  W, D)}: Also in this function we follow the function above. The only difference is that when we select and contract an edge (u,v) then we remove from V the vertex V to respect the contraction;
+	\item  \textbf{Contract(s, V,  W, D)}: Also in this function we follow the function above. The only difference is that when we select and contract an edge (u,v) then we remove from V the vertex v to respect the contraction;
 	\item  \textbf{Contract-Edge(u,v, W, D)}: Also in this case we follow the function above (We update D and W with the new values to execute the contraction of the edge) with our data structure;
 	\item  \textbf{Edge-Select(V1, D, W)}: Edge selecting randome select first node and look for connected other node, algorithm use:
 	\begin{enumerate}
 		\item  \textbf{Random-Select(C)}:
 			\begin{enumerate}
-			\item  Build Сumulative weights vector by input array of weights
-			\item  Set random value \textbf{r} in range (0, max value of weight)
-			\item  Run binary search  to return node related to selected edge 
+			\item  Build cumulative weights vector by input array of weights;
+			\item  Set random value \textbf{r} in range (0, max value of weight);
+			\item  Run binary search  to return node related to selected edge;
 			\end{enumerate}
 		\item  \textbf{binarySearch(array, x)}:
 			\begin{enumerate}
-			\item  Special case of binary search according to inequality C[i - 1] $\leq$ r $<$ C[i]
-			\item  Devide array in parts
-			\item  Check first value of right part, if random value higher, then go right
-			\item  If value lower check that previous element lower or equal 
-			\item  Return ralated name of node 
+			\item  Special case of binary search according to inequality C[i - 1] $\leq$ r $<$ C[i];
+			\item  Devide array in parts;
+			\item  Check first value of right part, if random value higher, then go right;
+			\item  If value lower check that previous element lower or equal;
+			\item  Return ralated name of node.
 			\end{enumerate}
 	\end{enumerate}
 
