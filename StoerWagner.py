@@ -1,4 +1,4 @@
-import math
+
 from re import T
 import time
 from collections import defaultdict
@@ -96,11 +96,11 @@ class MaxHeap:
             self.arrayHeap[i].index, self.arrayHeap[max].index = max, i # Update indexes
             self.arrayHeap[i], self.arrayHeap[max] = self.arrayHeap[max], self.arrayHeap[i]
             self.maxHeapify(max)
-
+        
     def shiftUp(self, index):
         parent = self.getParentIndex(index)
         current = index
-        while current > 0 and self.arrayHeap[parent].key < self.arrayHeap[current].key:
+        while current > 0 and self.arrayHeap[current].key > self.arrayHeap[parent].key: #self.arrayHeap[parent].key < self.arrayHeap[current].key:
             self.arrayHeap[current].index, self.arrayHeap[parent].index = parent, current # Update indexes
             self.arrayHeap[current], self.arrayHeap[parent] = self.arrayHeap[parent], self.arrayHeap[current]
             current = parent
@@ -120,14 +120,21 @@ class MaxHeap:
         #finally call minheapify() to restructure/maintain the min heap data structure
         self.maxHeapify(0)
         return max
-        
 
 def stMinCut(G: Graph):
+    '''
+    for v in G.nodes.values():
+            print("Node ", v.tag, "is connected to: ")
+            for u in v.adjacencyList:
+                print("node: ",u[0].tag, "weight ",u[1])
+    '''
     a = G.nodes.get(1)
 
     for u in G.nodes.values():
-         u.key= 0
-    
+        u.key = 0
+        u.isPresent = True
+        u.parent = None
+
     Q = MaxHeap(list(G.nodes.values()), a)
     s = empty
     t = empty
@@ -137,6 +144,8 @@ def stMinCut(G: Graph):
     while Q.arrayHeap.heapSize != 0:
 
         u = Q.extractMax()
+        
+        #print("max extract = ", u.tag, "which has key ", u.key)
 
         if Q.arrayHeap.heapSize > 0:
             V_minus_t.append(u)
@@ -144,28 +153,24 @@ def stMinCut(G: Graph):
         s = t
         t = u
         for v in u.adjacencyList:
-            if v[0].isPresent and v[0].notMerged:
+            #print("u is connected to: ", v[0].tag, "which has key", v[0].key, "And present: ", v[0].isPresent)
+            if v[0].isPresent:# and v[0].notMerged:
+                v[0].parent = u
                 v[0].key += v[1]
-                Q.shiftUp(v[0].index)  
-    
+                Q.shiftUp(v[0].index)
+                #print(v[0].tag, "updated to key: ",v[0].key)
+                Q.maxHeapify(0)                
+
+
     ST_cut.append(V_minus_t)
     ST_cut.append(t)
-    #G_contract_st = contract(G, s, t)
-
     ST_cut_cost = 0
-    if len(list(G.nodes.values())) == 3 and len(t.adjacencyList) == 2:
-        if t.adjacencyList[0][1] > t.adjacencyList[1][1]:
-            ST_cut_cost = t.adjacencyList[0][1]
-        else: ST_cut_cost = t.adjacencyList[1][1]
-    elif len(list(G.nodes.values())) == 2:
-        ST_cut_cost = G.nodes.get(1).adjacencyList[0][1]
-    else: 
-        for v in t.adjacencyList:
-            ST_cut_cost += v[1]
-    #print(ST_cut_cost)
-    #print("s", s.tag)
-    #print("t", t.tag)
 
+    for v in t.adjacencyList:
+        ST_cut_cost += v[1]
+     
+    #print("Cut t:",t.tag,"from s:",s.tag," at cost " ,ST_cut_cost)
+    #print("\n")
     return ST_cut, ST_cut_cost, s, t
 
 
@@ -233,11 +238,15 @@ def contract(G: Graph, s: Node, t: Node):
             if u[0].tag == tag_to_pop:
                 node_to_keep.adjacencyList.remove(u)   
 
-        G.nodes.pop(tag_to_pop)
+        #print("popping tag:",tag_to_pop, "merging into tag: ", tag_to_keep)
 
+
+        G.nodes.pop(tag_to_pop)
+       
         return G
 
 def GlobalMinCut (G :Graph):
+
     if len(list(G.nodes.values())) == 2:
         ST_cut_cost = G.nodes.get(1).adjacencyList[0][1]
         return ST_cut_cost
@@ -247,25 +256,21 @@ def GlobalMinCut (G :Graph):
         C2 = GlobalMinCut(new_G)
         if ST_cut_cost < C2:
             return ST_cut_cost
-        else: return C2
+        else: 
+            return C2
 
-       
-'''
-new = Graph()
-new.buildGraph(open("r_dataset/input_random_56_500.txt", "r"))
-test = GlobalMinCut(new)
-print(test)
 
-'''
-
-for filepath in glob.iglob('r_dataset//*.txt'):
+for filepath in glob.iglob('r_dataset//input_random_07*.txt'):
     new = Graph()
     new.buildGraph(open(filepath, "r"))
     start = time.time()
     ST_cut_cost = GlobalMinCut(new)
     end = time.time()
     time_cost =  end - start
-    print("File: ",filepath)
-    print("Min Cut Cost: ", ST_cut_cost)
-    print("Execution time: ", time_cost)
+    print(filepath, ST_cut_cost)
+    #print("File: ",filepath)
+    #print("Min Cut Cost: ", ST_cut_cost)
+    #print("Execution time: ", time_cost)
+
+#'''
 
