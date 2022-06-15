@@ -49,6 +49,8 @@ In the next subsections we explain how we have implemented the data structure an
 \pagebreak
 
 \subsection{Data Structure}
+Initially to implement our data structure we read the inputs in order to determine the number of edges and nodes.
+When we know this two parameters, initially we build the array with the inputs(node, node and weight) and then the other data useful to implement correctly the functions.
 For the implementation of the algortihm we used:
 \begin{itemize}
 	\item  \textbf{k}: is a constant ($log^2n$) used by Karger to repeat Recursive-Contract k times and to obtain an error with probability less or equal to 1/n where n is the number of vertices;
