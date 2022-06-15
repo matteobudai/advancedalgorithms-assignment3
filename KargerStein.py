@@ -1,11 +1,12 @@
 import math
-# import matplotlib.pyplot as plt                   GRAPH
+import matplotlib.pyplot as plt                   
 from math import log,sqrt
 import time
 import copy
 import random
 import glob
 from collections import defaultdict
+from matplotlib.lines import Line2D
 
 
 #Create a graph
@@ -84,6 +85,14 @@ class Graph:
         lines = input.readlines(0)
         numNodes = int(lines[0].split()[0])
         return numNodes
+
+    #Calculate asymptotic complexity 
+    def asymComplexity(self, input):
+        lines = input.readlines(0)
+        numNodes = int(lines[0].split()[0]) #n
+        numEdges = int(lines[0].split()[1]) #m
+        asymComplexity = numNodes**2 * math.log(numNodes)**3 # O ( n^2 log^3(n))
+        return numNodes, asymComplexity
 
 # Function: Implement binary search (special for RandomSelect function)
 # Input: Сumulative weights vector, random value x (aka r) 
@@ -208,12 +217,12 @@ def Recursive_Contract(V, W, D):
     return min(w1,w2)
 
 def Karger(G,k):
-    timeout = 60
+    timeout = 90
     start = time.time()
     min1=math.inf
     for i in range(0,k):
         if time.time() - start > timeout:
-            print("Timed Out at iteration =", i, " out of k =", k)
+            #print("Timed Out at iteration =", i, " out of k =", k)
             break
         #copy of the data structure
         copyV=copy.deepcopy(V)
@@ -226,7 +235,7 @@ def Karger(G,k):
             discovery_time = time.time() - start
             min1=t
 
-    print('Minimum:', min1)
+    #print('Minimum:', min1)
     end = time.time()
     time_cost =  end - start
     #print('Total Time:', time_cost)
@@ -240,37 +249,87 @@ min, time_cost, disc_time= Karger(graph, k)
 
 '''
 # array for print graph
-ideal_time = []
-real_time = []
-num_nodes = []
-for filepath in glob.iglob('r_dataset//*.txt'):
+results = []
+results_x_nodes = []
+results_y_timecost = []
+results_y_discovertime = []
+results_y_asymCompl = []
+
+for filepath in glob.iglob('r_dataset//input_random_*.txt'):
     new=Graph()
     graph, k, V, W, D= new.buildGraph(open(filepath, "r"))
+    numNodes, asymCom = new.asymComplexity(open(filepath, "r"))
     #print(filepath)
     min1, time_cost, discovery_time= Karger(graph,k)
-    print(filepath, k)
+    print("File: ",filepath)
+    print("Minimum Cut: ",min1)
+    if time_cost >= 90:
+        print("Execution Time: -Timed Out- ", time_cost)
+    else: print("Execution Time: ", time_cost)
+    print("Discovery Time: ", discovery_time)
+    results.append([numNodes, filepath, min1, round(time_cost,5),asymCom, discovery_time])
 
-    # graph part
-    # num_nodes.append(len(D))
-    # real_time.append(time_cost)
-'''
+#-----plotting----
 
-for i in range(len(ideal_time)):
-    n = num_nodes[i]
-    ideal_time.append( (n ** 2) * (math.log(n) ** 3) )
+results.sort(key=lambda x: x[0])
 
-print("num_nodes: ", num_nodes)
-print("real_time: ", real_time)
-print("num_nodes: ", num_nodes)
+for i in range(0, len(results)):
+    results_x_nodes.append(results[i][0])
+    results_y_timecost.append(results[i][3])
+    results_y_asymCompl.append(results[i][4])
+    results_y_discovertime.append(results[i][5])
 
-# graph part
-plt.plot(num_nodes, ideal_time, label = "ideal complexity")
-plt.plot(num_nodes, real_time, label = "real complexity")
-  
-plt.xlabel('number of nodes')
-plt.ylabel('time')
-plt.title('Complexity compare')
-  
-plt.legend()
+
+#complexity comparison
+
+#plot data
+fig, ax1 = plt.subplots()
+ax2 = ax1.twinx()
+ax1.scatter(results_x_nodes, results_y_timecost, c ="blue")
+ax2.plot(results_x_nodes, results_y_asymCompl, c ="green")
+
+#labels
+ax1.set_xlabel('Number of Vertices')
+ax1.set_ylabel('Execution Time (s)')
+ax2.set_ylabel('Asymptotic Complexity (10e6)')
+ax1.set_title('Karger Stein - Asymptotic Complexity Comparison')
+
+#legend
+bl_circle = Line2D([0], [0], marker='o', color='w', label='Execution Time',
+                        markerfacecolor='b', markersize=7)
+gr_line = Line2D([0], [0], label='Asymptotic Complexity', color = 'g')
+ax1.legend(handles=[bl_circle, gr_line])
+
 plt.show()
-'''
+
+#time cost
+
+#plot data
+plt.plot(results_x_nodes, results_y_timecost, c ="blue")
+
+#labels
+plt.xlabel('Number of Vertices')
+plt.ylabel('Execution Time (s)')
+plt.title('Karger Stein - Execution Time')
+
+#legend
+plt.show()
+
+#execution discovery comparison
+
+#plot data
+fig, ax1 = plt.subplots()
+ax1.plot(results_x_nodes, results_y_timecost, c ="blue")
+ax1.plot(results_x_nodes, results_y_discovertime, c ="green")
+
+#labels
+ax1.set_xlabel('Number of Vertices')
+ax1.set_ylabel('Time (s)')
+ax1.set_title('Karger Stein- Execution vs Discovery Time Comparison')
+
+#legend
+bl_circle = Line2D([0], [0], label='Execution Time', color = 'b')
+gr_line = Line2D([0], [0], label='Discovery Time', color = 'g')
+ax1.legend(handles=[bl_circle, gr_line])
+
+plt.show()

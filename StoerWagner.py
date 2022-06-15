@@ -4,6 +4,9 @@ import time
 from collections import defaultdict
 from numpy import empty
 import glob
+import math
+from matplotlib.lines import Line2D
+import matplotlib.pyplot as plt
 
 #Create a node
 class Node:
@@ -39,11 +42,21 @@ class Graph:
         self.nodes[tag].adjacencyList.append([self.nodes[adjTag], adjCost])
         self.nodes[adjTag].adjacencyList.append([self.nodes[tag], adjCost])
 
-    #Define number of edges
+    #Define number of nodes
     def numNodes(self, input):
         lines = input.readlines(0)
         numNodes = int(lines[0].split()[0])
         return numNodes
+
+    #Calculate asymptotic complexity 
+    def asymComplexity(self, input):
+        lines = input.readlines(0)
+        numNodes = int(lines[0].split()[0]) #n
+        numEdges = int(lines[0].split()[1]) #m
+        asymComplexity = numEdges * numNodes * math.log(numNodes) # O ( mn log(n))
+        return numNodes, asymComplexity
+
+
 
 class ArrayHeap(list):
     def __init__(self, array):
@@ -123,7 +136,14 @@ class MaxHeap:
         return max
 
 def stMinCut(G: Graph):
-    
+    '''
+    for v in G.nodes.values():
+            print("Node ", v.tag, "is connected to: ")
+            for u in v.adjacencyList:
+                print("node: ",u[0].tag, "weight ",u[1])
+
+    print("\n")
+    '''
     a = G.nodes.get(1)
 
     for u in G.nodes.values():
@@ -165,7 +185,7 @@ def stMinCut(G: Graph):
     for v in t.adjacencyList:
         ST_cut_cost += v[1]
      
-    #print("Cut t:",t.tag,"from s:",s.tag," at cost " ,ST_cut_cost)
+    #print("Cut t:",t.tag,"from s:",s.tag," at cost " ,ST_cut_cost, "\n")
     #print("\n")
     return ST_cut, ST_cut_cost, s, t
 
@@ -236,7 +256,8 @@ def contract(G: Graph, s: Node, t: Node):
                 node_to_keep.adjacencyList.remove(u)   
 
         G.nodes.pop(tag_to_pop)
-       
+        
+
         return G
 
 def GlobalMinCut (G :Graph):
@@ -254,17 +275,69 @@ def GlobalMinCut (G :Graph):
             return C2
 
 
+results = []
+results_x_nodes = []
+results_y_timecost = []
+results_y_asymCompl = []
+
 for filepath in glob.iglob('r_dataset//input_random_*.txt'):
     new = Graph()
     new.buildGraph(open(filepath, "r"))
+    numNodes, asymCom = new.asymComplexity(open(filepath, "r"))
     start = time.time()
     ST_cut_cost = GlobalMinCut(new)
     end = time.time()
     time_cost =  end - start
-    print(filepath, ST_cut_cost)
+    print("File: ", filepath)
+    print("Minimum Cut: ", ST_cut_cost)
+    print("Execution Time: ", time_cost)
+    results.append([numNodes, filepath, ST_cut_cost, round(time_cost,5),asymCom])
     #print("File: ",filepath)
     #print("Min Cut Cost: ", ST_cut_cost)
     #print("Execution time: ", time_cost)
-
 #'''
 
+#-----plotting----
+
+results.sort(key=lambda x: x[0])
+
+for i in range(0, len(results)):
+    results_x_nodes.append(results[i][0])
+    results_y_timecost.append(results[i][3])
+    results_y_asymCompl.append(results[i][4]) 
+
+
+#complexity comparison
+
+#plot data
+fig, ax1 = plt.subplots()
+ax2 = ax1.twinx()
+ax1.scatter(results_x_nodes, results_y_timecost, c ="blue")
+ax2.plot(results_x_nodes, results_y_asymCompl, c ="green")
+
+#labels
+ax1.set_xlabel('Number of Vertices')
+ax1.set_ylabel('Execution Time (s)')
+ax2.set_ylabel('Asymptotic Complexity (10e6)')
+ax1.set_title('Stoer Wagner - Asymptotic Complexity Comparison')
+
+#legend
+bl_circle = Line2D([0], [0], marker='o', color='w', label='Execution Time',
+                        markerfacecolor='b', markersize=7)
+gr_line = Line2D([0], [0], label='Asymptotic Complexity', color = 'g')
+ax1.legend(handles=[bl_circle, gr_line])
+
+plt.show()
+
+#time cost
+
+#plot data
+plt.plot(results_x_nodes, results_y_timecost, c ="blue")
+
+#labels
+plt.xlabel('Number of Vertices')
+plt.ylabel('Execution Time (s)')
+plt.title('Stoer Wagner - Execution Time')
+
+#legend
+plt.show()
