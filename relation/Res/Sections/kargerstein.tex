@@ -49,9 +49,8 @@ In the next subsections we explain how we have implemented the data structure an
 \pagebreak
 
 \subsection{Data Structure}
-Initially to implement our data structure we read the inputs in order to determine the number of edges and nodes.
-When we know this two parameters, initially we build the array with the inputs(node, node and weight) and then the other data useful to implement correctly the functions.
-For the implementation of the algortihm we used:
+Initially to implement our data structure, we read the inputs to determine the number of nodes, number of edges, and to build the "info" array with the format (node1 , node2, and weight).
+Using these parameters and the info array, we then determine k, V, D, W, as explained below:
 \begin{itemize}
 	\item  \textbf{k}: is a constant ($log^2n$) used by Karger to repeat Recursive-Contract k times and to obtain an error with probability less or equal to 1/n where n is the number of vertices;
 	\item  \textbf{V}: is the list of nodes;
