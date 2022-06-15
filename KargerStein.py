@@ -234,11 +234,7 @@ def Karger(G,k):
     
     return min1, time_cost, discovery_time
 
-'''
-graph, k, V, W, D= Graph().buildGraph(open("r_dataset/input_random_03_10.txt", "r"))
-min, time_cost, disc_time= Karger(graph, k)
 
-'''
 # array for print graph
 ideal_time = []
 real_time = []
@@ -253,8 +249,8 @@ for filepath in glob.iglob('r_dataset//*.txt'):
     # graph part
     # num_nodes.append(len(D))
     # real_time.append(time_cost)
-'''
 
+'''
 for i in range(len(ideal_time)):
     n = num_nodes[i]
     ideal_time.append( (n ** 2) * (math.log(n) ** 3) )
@@ -273,4 +269,4 @@ plt.title('Complexity compare')
   
 plt.legend()
 plt.show()
-'''
+''''''
