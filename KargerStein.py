@@ -243,11 +243,7 @@ def Karger(G,k):
     
     return min1, time_cost, discovery_time
 
-'''
-graph, k, V, W, D= Graph().buildGraph(open("r_dataset/input_random_03_10.txt", "r"))
-min, time_cost, disc_time= Karger(graph, k)
 
-'''
 # array for print graph
 results = []
 results_x_nodes = []
@@ -268,6 +264,7 @@ for filepath in glob.iglob('r_dataset//input_random_*.txt'):
     else: print("Execution Time: ", time_cost)
     print("Discovery Time: ", discovery_time)
     results.append([numNodes, filepath, min1, round(time_cost,5),asymCom, discovery_time])
+
 
 #-----plotting----
 
@@ -332,4 +329,3 @@ bl_circle = Line2D([0], [0], label='Execution Time', color = 'b')
 gr_line = Line2D([0], [0], label='Discovery Time', color = 'g')
 ax1.legend(handles=[bl_circle, gr_line])
 
-plt.show()
