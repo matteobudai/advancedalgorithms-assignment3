@@ -15,10 +15,11 @@ class Node:
         self.key = None
         self.parent = None
         self.isPresent = True
-        self.notMerged = True
-        self.flag_update = 0
         self.index = tag-1 # Track the index of the node in the heap instead of using list.index() method which is O(n)
         self.adjacencyList = []
+        self.notMerged = True
+        self.flag_update = 0
+
 
 #Create a graph
 class Graph:
@@ -42,12 +43,6 @@ class Graph:
         self.nodes[tag].adjacencyList.append([self.nodes[adjTag], adjCost])
         self.nodes[adjTag].adjacencyList.append([self.nodes[tag], adjCost])
 
-    #Define number of nodes
-    def numNodes(self, input):
-        lines = input.readlines(0)
-        numNodes = int(lines[0].split()[0])
-        return numNodes
-
     #Calculate asymptotic complexity 
     def asymComplexity(self, input):
         lines = input.readlines(0)
@@ -55,7 +50,6 @@ class Graph:
         numEdges = int(lines[0].split()[1]) #m
         asymComplexity = numEdges * numNodes * math.log(numNodes) # O ( mn log(n))
         return numNodes, asymComplexity
-
 
 
 class ArrayHeap(list):
@@ -118,7 +112,6 @@ class MaxHeap:
             self.arrayHeap[current], self.arrayHeap[parent] = self.arrayHeap[parent], self.arrayHeap[current]
             current = parent
             parent = self.getParentIndex(parent)
-        
 
     def extractMax(self):
         #this function both extracts the max and pops it out of the max heap
@@ -129,21 +122,14 @@ class MaxHeap:
         #then swap the right most node and first(max) node
         self.arrayHeap[0], self.arrayHeap[self.arrayHeap.heapSize-1] = self.arrayHeap[self.arrayHeap.heapSize-1], self.arrayHeap[0]
         self.arrayHeap[0].index = 0
-        #reduce the heapSize by 1 to pop out the min node
+        #reduce the heapSize by 1 to pop out the max node
         self.arrayHeap.heapSize -=1
-        #finally call minheapify() to restructure/maintain the min heap data structure
+        #finally call maxheapify() to restructure/maintain the max heap data structure
         self.maxHeapify(0)
         return max
+        
 
 def stMinCut(G: Graph):
-    '''
-    for v in G.nodes.values():
-            print("Node ", v.tag, "is connected to: ")
-            for u in v.adjacencyList:
-                print("node: ",u[0].tag, "weight ",u[1])
-
-    print("\n")
-    '''
     a = G.nodes.get(1)
 
     for u in G.nodes.values():
@@ -154,47 +140,29 @@ def stMinCut(G: Graph):
     Q = MaxHeap(list(G.nodes.values()), a)
     s = empty
     t = empty
-    V_minus_t = []
-    ST_cut = [] 
 
     while Q.arrayHeap.heapSize != 0:
-
         u = Q.extractMax()
-        
-        #print("max extract = ", u.tag, "which has key ", u.key)
-
-        if Q.arrayHeap.heapSize > 0:
-            V_minus_t.append(u)
-
         s = t
         t = u
         for v in u.adjacencyList:
-            #print("u is connected to: ", v[0].tag, "which has key", v[0].key, "And present: ", v[0].isPresent)
             if v[0].isPresent:# and v[0].notMerged:
-                v[0].parent = u
                 v[0].key += v[1]
+                v[0].parent = u
                 Q.shiftUp(v[0].index)
-                #print(v[0].tag, "updated to key: ",v[0].key)
-                Q.maxHeapify(0)                
+                #print(Q.arrayHeap[v[0].index].tag)
+                Q.maxHeapify(a.index)
 
-
-    ST_cut.append(V_minus_t)
-    ST_cut.append(t)
     ST_cut_cost = 0
-
+    #sum all connecting weights to t for the st minimum cut
     for v in t.adjacencyList:
-        ST_cut_cost += v[1]
-     
-    #print("Cut t:",t.tag,"from s:",s.tag," at cost " ,ST_cut_cost, "\n")
-    #print("\n")
-    return ST_cut, ST_cut_cost, s, t
 
+        ST_cut_cost += v[1]
+
+    return ST_cut_cost, s, t
 
 def contract(G: Graph, s: Node, t: Node):
-    if len(list(G.nodes.values())) == 2:
-        return G
-    else:
-        #prepare to contract nodes s and t to the node with the minimum tag 
+        #prepare to contract nodes s and t to the node with the minimum tag
         if (s.tag > t.tag):
             s.notMerged = False
             tag_to_pop = s.tag
@@ -207,9 +175,10 @@ def contract(G: Graph, s: Node, t: Node):
             tag_to_keep = s.tag
             node_to_keep = s
             node_to_pop = t
+        
         #traverse through each node and check if it connects to both s and t
         #if so then calculate the new adjacent cost to the merged s,t node
-        #if it only connects to the node we are "removing", then point it to the newly merged s,t node with the same original cost 
+        #if it only connects to the node we are "removing", then point it to the newly merged s,t node
         nodes_to_add = []
         for u in G.nodes.values():
             flag_update = 0
@@ -225,16 +194,15 @@ def contract(G: Graph, s: Node, t: Node):
                     new_adjCost += v[1]
                     connected_tag.append(t.tag)
 
-            #if only connected to the node we are "removing", point it to the newly merged node with the same origal weight 
+            #if only connected to the node we are "removing", point it to the newly merged node with the same weight 
             if flag_update == 1 and connected_tag[0] == tag_to_pop and u.tag != tag_to_keep:
                 u.flag_update = 1
                 for v in u.adjacencyList:
                     if v[0].tag == tag_to_pop:
                         nodes_to_add.append([u,v[1]])
                         v[0] = node_to_keep
-            #if connected to both s and t, it's new adjacency list should keep all original nodes nodes equal to s and t
-            #as well as a new adjacency to the merged s,t node with the sum of the two costs
-            if flag_update == 2: #and connected_tag[0] == tag_to_pop and u.tag != tag_to_keep:     
+
+            if flag_update == 2:     
                 u.flag_update = 2
                 new_adjacencyList = []
                 for v in u.adjacencyList:
@@ -256,31 +224,30 @@ def contract(G: Graph, s: Node, t: Node):
                 node_to_keep.adjacencyList.remove(u)   
 
         G.nodes.pop(tag_to_pop)
-        
-
+       
         return G
 
 def GlobalMinCut (G :Graph):
 
     if len(list(G.nodes.values())) == 2:
         ST_cut_cost = G.nodes.get(1).adjacencyList[0][1]
+        #print("Len 2 ST_cut_cost", ST_cut_cost)
         return ST_cut_cost
     else:
-        ST_cut, ST_cut_cost, s, t = stMinCut(G)
+        ST_cut_cost, s, t = stMinCut(G)
         new_G = contract(G, s, t)
         C2 = GlobalMinCut(new_G)
-        if ST_cut_cost < C2:
+        if ST_cut_cost <= C2:
             return ST_cut_cost
         else: 
             return C2
-
 
 results = []
 results_x_nodes = []
 results_y_timecost = []
 results_y_asymCompl = []
 
-for filepath in glob.iglob('r_dataset//input_random_*.txt'):
+for filepath in glob.iglob('r_dataset//input_random_25*.txt'):
     new = Graph()
     new.buildGraph(open(filepath, "r"))
     numNodes, asymCom = new.asymComplexity(open(filepath, "r"))
@@ -290,12 +257,10 @@ for filepath in glob.iglob('r_dataset//input_random_*.txt'):
     time_cost =  end - start
     print("File: ", filepath)
     print("Minimum Cut: ", ST_cut_cost)
-    print("Execution Time: ", time_cost)
+    print("Execution Time: ", time_cost, "\n")
     results.append([numNodes, filepath, ST_cut_cost, round(time_cost,5),asymCom])
-    #print("File: ",filepath)
-    #print("Min Cut Cost: ", ST_cut_cost)
-    #print("Execution time: ", time_cost)
 #'''
+'''
 
 #-----plotting----
 
@@ -341,3 +306,4 @@ plt.title('Stoer Wagner - Execution Time')
 
 #legend
 plt.show()
+'''
