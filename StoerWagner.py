@@ -247,7 +247,7 @@ results_x_nodes = []
 results_y_timecost = []
 results_y_asymCompl = []
 
-for filepath in glob.iglob('r_dataset//input_random_25*.txt'):
+for filepath in glob.iglob('r_dataset//input_random_*.txt'):
     new = Graph()
     new.buildGraph(open(filepath, "r"))
     numNodes, asymCom = new.asymComplexity(open(filepath, "r"))
@@ -259,8 +259,7 @@ for filepath in glob.iglob('r_dataset//input_random_25*.txt'):
     print("Minimum Cut: ", ST_cut_cost)
     print("Execution Time: ", time_cost, "\n")
     results.append([numNodes, filepath, ST_cut_cost, round(time_cost,5),asymCom])
-#'''
-'''
+
 
 #-----plotting----
 
@@ -306,4 +305,3 @@ plt.title('Stoer Wagner - Execution Time')
 
 #legend
 plt.show()
-'''
