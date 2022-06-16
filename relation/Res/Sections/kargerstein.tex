@@ -64,7 +64,7 @@ For the implementation of the algorithm we used these functions:
 \begin{itemize}
 	\item  \textbf{Karger(G,k)}: 
 		\begin{enumerate}
-		\item  This is the main function of the algorithm where we set the timeout to 60 to limit the execution time of large instances;
+		\item  This is the main function of the algorithm where we set the timeout to 120 seconds to limit the execution time of large instances;
 		\item  We start the time and we set the minimum cut to infinite;
 		\item  We iterate k times to obtain an error with probability less or equal to 1/n;
 		\item  If the time minus the starting time is greater than the timeout we break;

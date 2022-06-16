@@ -217,7 +217,7 @@ def Recursive_Contract(V, W, D):
     return min(w1,w2)
 
 def Karger(G,k):
-    timeout = 90
+    timeout = 120
     start = time.time()
     min1=math.inf
     for i in range(0,k):
