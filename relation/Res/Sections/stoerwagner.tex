@@ -1,15 +1,133 @@
 \section{Stoer and Wagner's Deterministic Algorithm}\label{stoer}
 
 
-\subsection{Data Structure}
+\underline{General Structure}:
+\begin{lstlisting}[mathescape=true]
+$\textbf{function}$ GlobalMinCut (G)
+    $\textbf{if}$ V = {a,b} $\textbf{then}$
+        $\textbf{return}$ ({a},{b})
+    $\textbf{else}$
+        (C$_{1}$,s,t) $\leftarrow$ stMinCut(G)
+        C$_{2}$ $\leftarrow$ GlobalMinCut(G/{s,t})
+        $\textbf{if}$ w(C$_{1}$) $\le$ w(C$_{2}$) $\textbf{then}$
+            $\textbf{return}$ C$_{1}$
+        $\textbf{else}$
+            $\textbf{return}$ C$_{2}$
+\end{lstlisting}	
+\underline{stMinCut with max heap}:
+\begin{lstlisting}[mathescape=true]
+$\textbf{function}$ stMinCut (G = (V,E,w)):
+    Q $\leftarrow$ $\emptyset$                          // Q max heap priority queue
+    $\textbf{for all}$ node u $\in$ V $\textbf{do}$
+        key[u] $\leftarrow$ 0
+        Insert(Q,u,key[u])
+    s,t $\leftarrow$ null
+    $\textbf{while}$ Q $\neq$ $\emptyset$ $\textbf{do}$
+        u $\leftarrow$ extractMax(Q)
+        s $\leftarrow$ t
+        t $\leftarrow$ u
+        $\textbf{for all}$ v adjacent to u $\textbf{do}$
+            $\textbf{if}$ v $\in$ Q $\textbf{then}$
+                key[v] $\leftarrow$ key[v] + w(u,v)
+                IncreaseKey(Q,v,key[v])
+    $\textbf{return}$ (V - {t},{t}),s,t
 
+\end{lstlisting}
+
+\subsection{Data Structure}
+A max heap data structure is used in order to implement Stoer and Wagner's algorithm with a priority queue. There are two classes, Graph and Node, which define the data parameters that are necessary for the MaxHeap class, as well as data parameters that are used in the implementation functions. The Graph, Node, and MaxHeap classes are defined as follows:
+
+	\subsubsection{Graph}
+	The Graph class takes the graph .txt file as an input, and initializes variables that construct the graph and support the max heap data structure.  
+	\begin{itemize}
+	\item \textbf{Initialize}: calls Python's defaultdict dictionary type
+	\item \textbf{createNodes}: takes number of nodes as an input, and initializes each node in the node dictionary by calling the Node class.
+	\item \textbf{buildGraph}: takes the graph .txt file as an input, and passes the number of nodes to the createNodes function. Futhermore, it passes each connecting node and their edge weight to the $\textbf{makeNodes}$ function, which appends to the nodes adjacencyList. 
+	\end{itemize}	
+	
+	\subsubsection{Node}
+	The Node class initializes eight instance variables for each node of the graph
+	\begin{itemize}
+	\item tag: integer identifier of a node 
+	\item key: default key value of null
+	\item parent: default parent value of null
+	\item isParent: boolean value to determine if a node is in a heap, default of true
+	\item index: index of node of the min heap array
+	\item adjacencyList: adjacency list of the node, default is an empty list
+	\item notMerged: boolean value to determine if a node has been merged, used in the contract function 
+	\item flagupdate: value to determine if a nodes adjacent cost needs to be udpated, using in the contract function
+	\end{itemize}
+	
+	\subsubsection{MaxHeap} The MaxHeap class creates the max heap data structure with an array heap, and is initialized by passing the node dictionary values and the starting node integer tag. In addition to functions that return the standard array heap rules parent, leftchild, and rightchild, the following functions are defined:
+	\begin{itemize}
+	\item \textbf{maxHeapify}: this method is passed an index and checks if any node swaps are required to maintain the max heap data structure, and if so it recursively calls itself until the max heap data structure is achieved 
+	\item \textbf{shiftUp}: this method is passed an index and properly positions the index element in the array with respect to it's parent in order to maintain the max heap data structure
+	\item \textbf{extractMax}: the method extracts the max, or root value, of the array heap. After extracting, it calls the maxHeapify method in order to maintain the max heap data structure
+	\end{itemize}
+
+	
 
 \subsection{Implementation}
+The algorithm is implemented using three functions: stMinCut, Contract, and GlobalMinCut. The GlobalMinCut function is the main function that will return the minimum cut of a graph, and within GlobalMinCut we call stMinCut and Contract. Before calling any of these functions, we must initialize the graph object using the Graph class, and then call the buildGraph function. As we will want to measure the execution time of the algorithm, we start a timer before calling the GlobalMinCut function, and stop the timer once the function returns the minimum cut. The three functions used in the implementation are described as follows:
 
+\subsubsection{stMinCut}
+The stMinCut function is passed a graph and returns two vertices s and t, such that s $\in$ S and t $\in$ T, and also returns the weight w(S,T), where w(S,T) is the smallest possible among all s,t cuts. We chose to have the stMinCut function return the weight of the s,t minimum cut rather than building a separate function. Using a max heap priority queue, the stMinCut function is implemented as follows:
 
+    \begin{enumerate}
+        \item Define an arbitrary starting node, a
+        \item For each node in the graph, define the key as 0, and define the isPresent value as True
+        \item Initialize the max heap data structure by calling the MaxHeap class, passing the nodes from the graph and the starting node a. If a is not already the root node, the call to initialize the max heap data structure will re-set the root node as the passed starting node, and will update the index for all other nodes.
+        \item Initialize s and t as null
+        \item Now that the MaxHeap object has been created, we will perform the following iterative process until the heap size is zero:
+        	\begin{itemize}
+    	    \item Extract the maximum from the max heap data structure by calling extractMax(), which returns the node u with the maximized weight that should be visited next. 
+    	    \item Set s equal to t, and t equal to u
+    	    \item For each node, v, in the adjacency list of u, check if it is present in the array heap. If it is, increase it's key by the weight between u and v, and shift up v in the max heap. Call maxHeapify with the original starting node a in order to preserve the max heap data structure. 
+    	    \end{itemize}
+    	On the last iteration of step 5, s will be defined as the second to last node existing in the max heap, and t will be defined as the last existing node. 
+    	\item Initialize the ST{\_}cut{\_}cost and set equal to 0
+    	\item Set ST{\_}cut{\_}cost equal to the sum of all edge weights adjacent to t
+    	\item Return s, t, and ST{\_}cut{\_}cost
+    \end{enumerate}
 
+\subsubsection{Contract}   
+The contract function is passed a graph and two nodes s and t, and returns the graph with s and t contracted into one node:
+
+    \begin{enumerate}
+        \item Determine which node between s and t has the minimum tag, and choose this tag to represent the newly merged s,t node
+        \item Traverse through each node u in the graph and check if it connected to s, t, or both.
+            \begin{itemize}
+            \item If a node only connected to either s or t, keep that original connecting weight as the weight connecting u to the merged s,t node
+            \item If a node u connected to both s and t, calculate the weight connecting u to the merged s,t node as the sum of the original two connecting weights, w(u,s) + w(u,t)
+            \end{itemize}
+        \item Update the merged s,t node adjacency list to include any changes made in the prior step
+        \item Remove from the graph the node associated with the tag that was not chosen to represent the merged s,t node and then return the graph
+     
+    \end{enumerate}
+
+\subsubsection{GlobalMinCut}  
+The function GlobalMinCut takes a graph G and returns it's minimum cut cost. It is a recursive function that is performed as follows:
+\begin{enumerate}
+
+    \item Check if the graph only contains two nodes, and if so return the cost of their connecting edge. If the graph contains more than two nodes, continue to the next step
+    \item Call the stMinCut function passing the graph G, and store the returned nodes s, t, and the s,t minimum cut ST{\_}cut{\_}cost
+    \item Call the contract function passing the graph G and nodes s and t, and store the returned graph new{\_}G that has merged nodes s and t
+    \item Recursively call the GlobalMinCut passing the merged graph new{\_}G, which returns the minimum s,t cut from either G and new{\_}G. The final return will be the minimum s,t cut that was found throughout the recursive process, and therefore the global minimum cut. 
+
+\end{enumerate}
 \subsection{Complexity}
-
+To calculate the total complexity, we must consider the following components where n in the number of nodes and m is the number of edges:
+\begin{itemize}
+    \item stMinCut using a max heap
+    \begin{itemize}
+        \item Initialization of each node: O(n)
+        \item extractMax has complexity of O(log n) and is performed n times in the while loop, so total complexity of O(n log n)
+        \item The for loop is called O(n) times, the check within the for loop is of complexity O(1), and the shiftUp method is of complexity O(log n). Therefore, the total cost of the for loop is O(m log n). 
+    \end{itemize}
+    Adding these components simplifies to a total complexity of O(m log n).
+    \item GlobalMinCut will call stMinCut n times
+\end{itemize}
+Therefore, \textbf{the total complexity of the algorithm is O(mn log n)}. We were able to achieve this complexity in our code as seen in the asymptotic complexity comparison shown in the Results section.   
 
 
 \pagebreak
