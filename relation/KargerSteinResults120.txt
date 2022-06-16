@@ -1,0 +1,223 @@
+Minimum Cut:  951
+Execution Time:  4.011253118515015
+Discovery Time:  1.302159070968628
+File:  r_dataset/input_random_29_200.txt
+Minimum Cut:  484
+Execution Time:  8.905862092971802
+Discovery Time:  0.34348487854003906
+File:  r_dataset/input_random_07_20.txt
+Minimum Cut:  522
+Execution Time:  0.009203195571899414
+Discovery Time:  0.003240346908569336
+File:  r_dataset/input_random_14_60.txt
+Minimum Cut:  299
+Execution Time:  0.23416805267333984
+Discovery Time:  0.038658857345581055
+File:  r_dataset/input_random_23_100.txt
+Minimum Cut:  772
+Execution Time:  0.8627970218658447
+Discovery Time:  0.10864996910095215
+File:  r_dataset/input_random_02_10.txt
+Minimum Cut:  223
+Execution Time:  0.0008592605590820312
+Discovery Time:  0.00022912025451660156
+File:  r_dataset/input_random_30_200.txt
+Minimum Cut:  850
+Execution Time:  8.90188980102539
+Discovery Time:  0.702427864074707
+File:  r_dataset/input_random_36_250.txt
+Minimum Cut:  670
+Execution Time:  17.084450006484985
+Discovery Time:  0.6597256660461426
+File:  r_dataset/input_random_31_200.txt
+Minimum Cut:  1382
+Execution Time:  8.93155813217163
+Discovery Time:  2.4847543239593506
+File:  r_dataset/input_random_40_300.txt
+Minimum Cut:  1148
+Execution Time:  43.96793174743652
+Discovery Time:  5.732435941696167
+File:  r_dataset/input_random_11_40.txt
+Minimum Cut:  648
+Execution Time:  0.04766583442687988
+Discovery Time:  0.005800962448120117
+File:  r_dataset/input_random_22_100.txt
+Minimum Cut:  890
+Execution Time:  0.8637797832489014
+Discovery Time:  0.2215261459350586
+File:  r_dataset/input_random_16_60.txt
+Minimum Cut:  159
+Execution Time:  0.2321920394897461
+Discovery Time:  0.028501033782958984
+File:  r_dataset/input_random_05_20.txt
+Minimum Cut:  1526
+Execution Time:  0.008926868438720703
+Discovery Time:  0.001991748809814453
+File:  r_dataset/input_random_35_250.txt
+Minimum Cut:  129
+Execution Time:  17.213772773742676
+Discovery Time:  0.6674959659576416
+File:  r_dataset/input_random_19_80.txt
+Minimum Cut:  714
+Execution Time:  0.48385095596313477
+Discovery Time:  0.06036996841430664
+File:  r_dataset/input_random_44_350.txt
+Minimum Cut:  175
+Execution Time:  77.97997689247131
+Discovery Time:  1.822113037109375
+File:  r_dataset/input_random_39_300.txt
+Minimum Cut:  868
+Execution Time:  43.665935754776
+Discovery Time:  3.4303689002990723
+File:  r_dataset/input_random_04_10.txt
+Minimum Cut:  4974
+Execution Time:  0.000911712646484375
+Discovery Time:  0.0002579689025878906
+File:  r_dataset/input_random_26_150.txt
+Minimum Cut:  424
+Execution Time:  4.024105072021484
+Discovery Time:  0.3318352699279785
+File:  r_dataset/input_random_53_500.txt
+Minimum Cut:  43
+Execution Time: -Timed Out-  120.56941533088684
+Discovery Time:  5.117500305175781
+File:  r_dataset/input_random_38_300.txt
+Minimum Cut:  869
+Execution Time:  30.259165048599243
+Discovery Time:  1.134328842163086
+File:  r_dataset/input_random_27_150.txt
+Minimum Cut:  1153
+Execution Time:  4.017089128494263
+Discovery Time:  0.3223261833190918
+File:  r_dataset/input_random_21_100.txt
+Minimum Cut:  341
+Execution Time:  0.8537211418151855
+Discovery Time:  0.10670018196105957
+File:  r_dataset/input_random_09_40.txt
+Minimum Cut:  2137
+Execution Time:  0.06216597557067871
+Discovery Time:  0.030718088150024414
+File:  r_dataset/input_random_48_400.txt
+Minimum Cut:  509
+Execution Time: -Timed Out-  123.33206105232239
+Discovery Time:  2.752584934234619
+File:  r_dataset/input_random_32_200.txt
+Minimum Cut:  1102
+Execution Time:  8.914821147918701
+Discovery Time:  0.7003021240234375
+File:  r_dataset/input_random_17_80.txt
+Minimum Cut:  969
+Execution Time:  0.48109889030456543
+Discovery Time:  0.062489986419677734
+File:  r_dataset/input_random_34_250.txt
+Minimum Cut:  381
+Execution Time:  16.999696969985962
+Discovery Time:  0.669975757598877
+File:  r_dataset/input_random_24_100.txt
+Minimum Cut:  1561
+Execution Time:  0.8615388870239258
+Discovery Time:  0.4845550060272217
+File:  r_dataset/input_random_52_450.txt
+Minimum Cut:  639
+Execution Time: -Timed Out-  124.87500095367432
+Discovery Time:  35.25984501838684
+File:  r_dataset/input_random_06_20.txt
+Minimum Cut:  1684
+Execution Time:  0.009434938430786133
+Discovery Time:  0.0010499954223632812
+File:  r_dataset/input_random_15_60.txt
+Minimum Cut:  2113
+Execution Time:  0.2346820831298828
+Discovery Time:  0.06541681289672852
+File:  r_dataset/input_random_03_10.txt
+Minimum Cut:  2302
+Execution Time:  0.0008580684661865234
+Discovery Time:  0.00043702125549316406
+File:  r_dataset/input_random_12_40.txt
+Minimum Cut:  2486
+Execution Time:  0.04701519012451172
+Discovery Time:  0.01601099967956543
+File:  r_dataset/input_random_01_10.txt
+Minimum Cut:  3056
+Execution Time:  0.0008797645568847656
+Discovery Time:  0.00025177001953125
+File:  r_dataset/input_random_08_20.txt
+Minimum Cut:  2866
+Execution Time:  0.0087738037109375
+Discovery Time:  0.0009808540344238281
+File:  r_dataset/input_random_10_40.txt
+Minimum Cut:  1446
+Execution Time:  0.04685783386230469
+Discovery Time:  0.010510921478271484
+File:  r_dataset/input_random_56_500.txt
+Minimum Cut:  584
+Execution Time: -Timed Out-  310.76233196258545
+Discovery Time:  5.1821608543396
+File:  r_dataset/input_random_45_400.txt
+Minimum Cut:  508
+Execution Time: -Timed Out-  121.95221900939941
+Discovery Time:  3.0143699645996094
+File:  r_dataset/input_random_41_350.txt
+Minimum Cut:  676
+Execution Time:  77.57277178764343
+Discovery Time:  3.8166589736938477
+File:  r_dataset/input_random_51_450.txt
+Minimum Cut:  336
+Execution Time: -Timed Out-  124.77546977996826
+Discovery Time:  11.989313840866089
+File:  r_dataset/input_random_47_400.txt
+Minimum Cut:  362
+Execution Time: -Timed Out-  122.56288528442383
+Discovery Time:  21.2611563205719
+File:  r_dataset/input_random_13_60.txt
+Minimum Cut:  1282
+Execution Time:  0.23063015937805176
+Discovery Time:  0.029880046844482422
+File:  r_dataset/input_random_54_500.txt
+Minimum Cut:  805
+Execution Time: -Timed Out-  123.38003921508789
+Discovery Time:  41.22685623168945
+File:  r_dataset/input_random_18_80.txt
+Minimum Cut:  1756
+Execution Time:  0.48228001594543457
+Discovery Time:  0.06386613845825195
+File:  r_dataset/input_random_43_350.txt
+Minimum Cut:  818
+Execution Time:  77.93455815315247
+Discovery Time:  12.00841498374939
+File:  r_dataset/input_random_37_300.txt
+Minimum Cut:  1137
+Execution Time:  30.463282823562622
+Discovery Time:  7.068966865539551
+File:  r_dataset/input_random_28_150.txt
+Minimum Cut:  707
+Execution Time:  4.035922050476074
+Discovery Time:  0.1666240692138672
+File:  r_dataset/input_random_49_450.txt
+Minimum Cut:  400
+Execution Time: -Timed Out-  120.25186514854431
+Discovery Time:  12.398844957351685
+File:  r_dataset/input_random_42_350.txt
+Minimum Cut:  290
+Execution Time:  77.85609221458435
+Discovery Time:  1.8373641967773438
+File:  r_dataset/input_random_33_250.txt
+Minimum Cut:  346
+Execution Time:  17.711110830307007
+Discovery Time:  2.7145071029663086
+File:  r_dataset/input_random_20_80.txt
+Minimum Cut:  2610
+Execution Time:  0.49376487731933594
+Discovery Time:  0.06318902969360352
+File:  r_dataset/input_random_50_450.txt
+Minimum Cut:  364
+Execution Time: -Timed Out-  121.21630597114563
+Discovery Time:  4.213177919387817
+File:  r_dataset/input_random_46_400.txt
+Minimum Cut:  904
+Execution Time: -Timed Out-  120.51042199134827
+Discovery Time:  18.395902156829834
+File:  r_dataset/input_random_55_500.txt
+Minimum Cut:  363
+Execution Time: -Timed Out-  123.59309792518616
+Discovery Time:  22.01072883605957
